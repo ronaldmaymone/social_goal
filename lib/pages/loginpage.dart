@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage>{
         }
         else{
           String userId = await widget.auth.createUser(_email, _password);
-          Firestore.instance.collection('Users').
+          await Firestore.instance.collection('Users').
           document(userId).setData({
             'Nome': _username,
             'Nacionalidade': _nacionalidade,
