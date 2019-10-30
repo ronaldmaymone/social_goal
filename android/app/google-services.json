@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "414064244711",
+    "firebase_url": "https://social-goal-c3975.firebaseio.com",
+    "project_id": "social-goal-c3975",
+    "storage_bucket": "social-goal-c3975.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:414064244711:android:b552d3a9b7a129127b2f42",
+        "android_client_info": {
+          "package_name": "com.example.social_goal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "414064244711-tj4jp91vuqpkas9erc1ld0j66352h4ck.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdgGh7CUS0j7dR7dvBYaJhXwFDr-5ikq0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "414064244711-tj4jp91vuqpkas9erc1ld0j66352h4ck.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
