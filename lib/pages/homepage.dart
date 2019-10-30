@@ -5,6 +5,7 @@ import 'profilescreen.dart';
 import 'feedpage.dart';
 import 'package:social_goal/auth.dart';
 import 'package:social_goal/user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DrawerItem {
   String title;
@@ -13,9 +14,10 @@ class DrawerItem {
 }
 
 class HomePage extends StatefulWidget {
-  HomePage({this.auth, this.user, this.onSignedOut});
+  HomePage({this.auth, this.userId, this.onSignedOut});
   final BaseAuth auth;
-  final BaseUser user;
+  //final BaseUser user;
+  final String userId;
   final VoidCallback onSignedOut;
 
   final drawerItems = [
@@ -32,6 +34,21 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedDrawerIndex = 0;
+  BaseUser _user;
+
+  @override
+  void initState() {
+    super.initState();
+    _getUser().then((user){
+      setState(() {
+        _user = user;
+      });
+    });
+  }
+
+  Future<BaseUser> _getUser() async{
+    return User(await Firestore.instance.collection("Users").document(widget.userId).get());
+  }
 
   void _signOut() async{
     try{
@@ -47,7 +64,7 @@ class _HomePageState extends State<HomePage> {
       case 0:
         return new FeedPage();
       case 1:
-        return new ProfileScreen(usuario: widget.user);
+        return new ProfileScreen(usuario: _user);
       case 2:
         return new GoalPage();
       default:
@@ -85,7 +102,7 @@ class _HomePageState extends State<HomePage> {
       drawer: new Drawer(
         child: new Column(
           children: <Widget>[
-            new UserAccountsDrawerHeader(accountName: new Text(widget.user.nome), accountEmail: Text(widget.user.email)),
+            new UserAccountsDrawerHeader(accountName: new Text(_user.nome), accountEmail: Text(_user.email)),
             new Column(children: drawerOptions)],
         ),
       ),

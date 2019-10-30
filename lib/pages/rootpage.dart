@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'loginpage.dart';
 import 'package:social_goal/auth.dart';
 import 'homepage.dart';
-import 'package:social_goal/user.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RootPage extends StatefulWidget {
   RootPage({this.auth});
@@ -22,7 +20,6 @@ enum AuthStatus {
 
 class _RootPageState extends State<RootPage> {
   AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
-  BaseUser _usuario;
   String _userId = "";
 
   @override
@@ -45,23 +42,9 @@ class _RootPageState extends State<RootPage> {
         _userId = userid;
       });
     });
-    _getUser().then((onValue){
-      setState(() {
-        _usuario = onValue;
-      });
-    });
-    print("Nome do usuário: ${_usuario.nome}");
     setState(() {
       authStatus = AuthStatus.LOGGED_IN;
     });
-   //_getUser();
-  }
-
-  Future<BaseUser> _getUser() async{
-    return User(await Firestore.instance.collection("Users").document(_userId).get());
-    /*setState(() {
-      _usuario = temp;
-    });*/
   }
 
   void _onSignedOut() {
@@ -96,7 +79,8 @@ class _RootPageState extends State<RootPage> {
         if (_userId.length > 0 && _userId != null) {
           return new HomePage(
             auth: widget.auth,
-            user: _usuario,
+            //user: _usuario,
+            userId: _userId,
             onSignedOut: _onSignedOut,
           );
         } else return _buildWaitingScreen();
