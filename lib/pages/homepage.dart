@@ -79,35 +79,47 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var drawerOptions = <Widget>[];
-    for (var i = 0; i < widget.drawerItems.length; i++){
+    for (var i = 0; i < widget.drawerItems.length; i++) {
       var d = widget.drawerItems[i];
       drawerOptions.add(
           new ListTile(
             leading: new Icon(d.icon),
             title: new Text(d.title),
             selected: i == _selectedDrawerIndex,
-            onTap: ()=> _onSelectItem(i),
+            onTap: () => _onSelectItem(i),
           )
       );
     }
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text(widget.drawerItems[_selectedDrawerIndex].title),
-        actions: <Widget>[
-          new FlatButton(
-            onPressed: _signOut,
-            child: new Text('Logout', style: new TextStyle(fontSize: 17.0, color: Colors.white))
-        )],
-      ),
-      drawer: new Drawer(
-        child: new Column(
-          children: <Widget>[
-            new UserAccountsDrawerHeader(accountName: new Text(_user.nome), accountEmail: Text(_user.email)),
-            new Column(children: drawerOptions)],
+    if (_user != null) {
+      return new Scaffold(
+        appBar: new AppBar(
+          title: new Text(widget.drawerItems[_selectedDrawerIndex].title),
+          actions: <Widget>[
+            new FlatButton(
+                onPressed: _signOut,
+                child: new Text('Logout',
+                    style: new TextStyle(fontSize: 17.0, color: Colors.white))
+            )
+          ],
         ),
-      ),
-      body: _getDrawerItemWidget(_selectedDrawerIndex),
-    );
+        drawer: new Drawer(
+          child: new Column(
+            children: <Widget>[
+              new UserAccountsDrawerHeader(accountName: new Text(_user.nome),
+                  accountEmail: Text(_user.email)),
+              new Column(children: drawerOptions)],
+          ),
+        ),
+        body: _getDrawerItemWidget(_selectedDrawerIndex),
+      );
+    }
+    else{
+      return Scaffold(
+        body: Container(
+          alignment: Alignment.center,
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
   }
-
 }
