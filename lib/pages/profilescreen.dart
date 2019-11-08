@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path/path.dart';
 import 'package:social_goal/user.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -26,10 +25,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
 
     Future uploadPic(BuildContext context) async{
-      String fileName = basename(_image.path);
-      StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(fileName);
+      StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(widget.usuario.id);
       StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
       StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+      widget.usuario.updateProfilePicPath(await firebaseStorageRef.getDownloadURL());
       setState(() {
         Scaffold.of(context).showSnackBar(SnackBar(content: Text('Picture Uploaded')));
       });
@@ -56,7 +55,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               height: 180.0,
                               child: (_image!=null)?Image.file(_image, fit: BoxFit.fill)
                                   :Image.network(
-                                'https://images-na.ssl-images-amazon.com/images/I/81-yKbVND-L._SY355_.png',
+                                //'https://images-na.ssl-images-amazon.com/images/I/81-yKbVND-L._SY355_.png',
+                                widget.usuario.profilePicPath,
                                 fit: BoxFit.fill,
                               )
                           ),

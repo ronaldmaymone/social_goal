@@ -16,7 +16,6 @@ class DrawerItem {
 class HomePage extends StatefulWidget {
   HomePage({this.auth, this.userId, this.onSignedOut});
   final BaseAuth auth;
-  //final BaseUser user;
   final String userId;
   final VoidCallback onSignedOut;
 
@@ -106,7 +105,18 @@ class _HomePageState extends State<HomePage> {
           child: new Column(
             children: <Widget>[
               new UserAccountsDrawerHeader(accountName: new Text(_user.nome),
-                  accountEmail: Text(_user.email)),
+                  accountEmail: Text(_user.email),
+                  currentAccountPicture: CircleAvatar(
+                    child: ClipOval(
+                      child: SizedBox(
+                        width: 100,
+                        height: 100,
+                        child: _user.profilePicPath != ""?Image.network(_user.profilePicPath,
+                            fit: BoxFit.fill):null
+                      )
+                    )
+                  )
+              ),
               new Column(children: drawerOptions)],
           ),
         ),
