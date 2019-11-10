@@ -8,10 +8,13 @@ abstract class BaseGoal{
 }
 
 class Goal implements BaseGoal{
-  DocumentSnapshot goal;
+  DocumentSnapshot _goal;
+  Goal(DocumentSnapshot objetivo){
+    this._goal = objetivo;
+  }
 
-  String get title => goal["title"];
-  String get creator => goal["creator"];
-  String get tag => goal["tag"];
-  String get description => goal["description"];
+  String get title => _goal["title"];
+  String get creator => _goal["creator"];
+  String get tag => _goal["tag"];
+  String get description => _goal["description"];
 }

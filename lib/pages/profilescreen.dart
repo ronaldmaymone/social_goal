@@ -11,8 +11,28 @@ class ProfileScreen extends StatefulWidget {
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
+enum TextEdit{
+  nome,
+  nacionalidade,
+  nascimento,
+  notEditting
+}
+
 class _ProfileScreenState extends State<ProfileScreen> {
   File _image;
+  Map<String, dynamic> _newData =
+    {"ProfilePicPath": null,"Nome": null,"Nascimento": null,"Nacionalidade": null};
+  TextEditingController _nameControl = TextEditingController();
+  TextEditingController _nacionalidadeControl = TextEditingController();
+  TextEditingController _nascimentoControl = TextEditingController();
+  TextEdit _edit = TextEdit.notEditting;
+
+
+  void _clearAllText(){
+    _nameControl.clear();
+    _nacionalidadeControl.clear();
+    _nascimentoControl.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,23 +44,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
       });
     }
 
-    Future uploadPic(BuildContext context) async{
-      StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(widget.usuario.id);
-      StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
-      StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
-      widget.usuario.updateProfilePicPath(await firebaseStorageRef.getDownloadURL());
+    void _update(BuildContext context) async{
+      if (_image != null){
+        StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(widget.usuario.id);
+        StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
+        StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+        //widget.usuario.updateProfilePicPath(await firebaseStorageRef.getDownloadURL());
+        String temp = await firebaseStorageRef.getDownloadURL();
+        setState(() {
+          _newData['ProfilePicPath'] = temp;
+        });
+      }
+      widget.usuario.updateUser(_newData);
       setState(() {
-        Scaffold.of(context).showSnackBar(SnackBar(content: Text('Picture Uploaded')));
+      Scaffold.of(context).showSnackBar(
+        SnackBar(content: Text('User Updated'),
+        backgroundColor: Colors.green,
+        duration: Duration(seconds: 2)));
       });
     }
 
     return Scaffold(
       body: Builder(
-          builder: (context)=>Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+          builder: (context) => Container(
+            child: ListView(
               children: <Widget>[
-                SizedBox(height: 20,),
+                SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -54,9 +83,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               width: 180.0,
                               height: 180.0,
                               child: (_image!=null)?Image.file(_image, fit: BoxFit.fill)
-                                  :Image.network(
-                                //'https://images-na.ssl-images-amazon.com/images/I/81-yKbVND-L._SY355_.png',
-                                widget.usuario.profilePicPath,
+                                  :Image.network(widget.usuario.profilePicPath,
                                 fit: BoxFit.fill,
                               )
                           ),
@@ -77,44 +104,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ],
                 ),
-                SizedBox(height: 10,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Container(
-                        child: Column(
-                          children: <Widget>[
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text('Username',
-                                  style: TextStyle(
-                                      color: Colors.blueGrey, fontSize: 18.0)),
-                            ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(widget.usuario.nome,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.bold)),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Container(
-                        child: Icon(
-                          Icons.edit,
-                          color: Colors.lightBlueAccent,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
                 SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -126,31 +115,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           children: <Widget>[
                             Align(
                               alignment: Alignment.centerLeft,
-                              child: Text('Nascimento',
-                                  style: TextStyle(
-                                      color: Colors.blueGrey, fontSize: 18.0)),
+                              child: Text("Nome", style: TextStyle(
+                                  color: Colors.blueGrey,
+                                  fontSize: 18.0)),
                             ),
                             Align(
                               alignment: Alignment.centerLeft,
-                              child: Text(widget.usuario.Nascimento,
-                                  style: TextStyle(
+                              child: SizedBox(width: 250,child:TextField(
+                                controller: _nameControl,
+                                decoration: InputDecoration(
+                                  hintText: widget.usuario.nome,
+                                  hintStyle: TextStyle(
                                       color: Colors.black,
                                       fontSize: 20.0,
-                                      fontWeight: FontWeight.bold)),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                enabled: _edit == TextEdit.nome?true:false,
+                                onChanged: (newvalue){
+                                  setState(() {
+                                    _newData['Nome'] = newvalue;
+                                  });
+                                },
+                              ))
                             ),
                           ],
-                        ),
-                      ),
+                        )
+                      )
                     ),
                     Align(
-                      alignment: Alignment.centerRight,
-                      child: Container(
-                        child: Icon(
-                          Icons.edit,
-                          color: Colors.lightBlueAccent,
-                        ),
-                      ),
-                    ),
+                        alignment: Alignment.centerLeft,
+                        child: IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: (){
+                              setState(() {
+                                _edit = TextEdit.nome;
+                              });
+                            }
+                        )
+                    )
                   ],
                 ),
                 SizedBox(height: 10),
@@ -158,40 +160,103 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     Align(
-                      alignment: Alignment.centerLeft,
-                      child: Container(
-                        child: Column(
-                          children: <Widget>[
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text('Nacionalidade',
-                                  style: TextStyle(
-                                      color: Colors.blueGrey, fontSize: 18.0)),
-                            ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(widget.usuario.nacionalidade,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.bold)),
-                            ),
-                          ],
-                        ),
-                      ),
+                        alignment: Alignment.centerLeft,
+                        child: Container(
+                            child: Column(
+                              children: <Widget>[
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text("Nascimento", style: TextStyle(
+                                      color: Colors.blueGrey,
+                                      fontSize: 18.0)),
+                                ),
+                                Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: SizedBox(width:250,child:TextField(
+                                      controller: _nascimentoControl,
+                                      decoration: InputDecoration(
+                                        hintText: widget.usuario.nascimento,
+                                        hintStyle: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      enabled: _edit == TextEdit.nascimento?true:false,
+                                      onChanged: (newvalue){
+                                        setState(() {
+                                          _newData['Nascimento'] = newvalue;
+                                        });
+                                      },
+                                    ))
+                                ),
+                              ],
+                            )
+                        )
                     ),
                     Align(
-                      alignment: Alignment.centerRight,
-                      child: Container(
-                        child: Icon(
-                          Icons.edit,
-                          color: Colors.lightBlueAccent,
-                        ),
-                      ),
-                    ),
+                        alignment: Alignment.centerLeft,
+                        child: IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: (){
+                              setState(() {
+                                _edit = TextEdit.nascimento;
+                              });
+                            }
+                        )
+                    )
                   ],
                 ),
                 SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Align(
+                        alignment: Alignment.centerLeft,
+                        child: Container(
+                            child: Column(
+                              children: <Widget>[
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text("Nacionalidade", style: TextStyle(
+                                      color: Colors.blueGrey,
+                                      fontSize: 18.0)),
+                                ),
+                                Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: SizedBox(width:250,child:TextField(
+                                      controller: _nacionalidadeControl,
+                                      decoration: InputDecoration(
+                                        hintText: widget.usuario.nacionalidade,
+                                        hintStyle: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      enabled: _edit == TextEdit.nacionalidade?true:false,
+                                      onChanged: (newvalue){
+                                        setState(() {
+                                          _newData['Nacionalidade'] = newvalue;
+                                        });;
+                                      },
+                                    ))
+                                ),
+                              ],
+                            )
+                        )
+                    ),
+                    Align(
+                        alignment: Alignment.centerLeft,
+                        child: IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: (){
+                              setState(() {
+                                _edit = TextEdit.nacionalidade;
+                              });
+                            }
+                        )
+                    )
+                  ],
+                ),
                 Container(
                   margin: EdgeInsets.only(left:20.0),
                   child: Row(
@@ -209,28 +274,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     RaisedButton(
                       color: Colors.blue,
-                      onPressed: (){
-                        Navigator.of(context).pop;
-                      },
+                      onPressed: () => _clearAllText(),
                       child: Text(
                         'Cancel',
                         style: TextStyle(color: Colors.white, fontSize: 16.0),
                       ),
                     ),
-                    SizedBox(width: 40,),
+                    SizedBox(width: 40),
                     RaisedButton(
                       color: Colors.blue,
                       onPressed: (){
-                        uploadPic(context);
+                        _update(context);
                       },
                       child: Text(
-                        'Submit',
+                        'Save Changes',
                         style: TextStyle(color: Colors.white, fontSize: 16.0),
                       ),
                     )
