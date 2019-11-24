@@ -49,7 +49,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(widget.usuario.id);
         StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
         StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
-        //widget.usuario.updateProfilePicPath(await firebaseStorageRef.getDownloadURL());
         String temp = await firebaseStorageRef.getDownloadURL();
         setState(() {
           _newData['ProfilePicPath'] = temp;
@@ -84,8 +83,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               height: 180.0,
                               child: (_image!=null)?Image.file(_image, fit: BoxFit.fill)
                                   :Image.network(widget.usuario.profilePicPath,
-                                fit: BoxFit.fill,
-                              )
+                                fit: BoxFit.fill)
                           ),
                         ),
                       ),

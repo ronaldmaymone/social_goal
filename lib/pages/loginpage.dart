@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_goal/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 class LoginPage extends StatefulWidget{
   LoginPage({this.auth,this.onSignedIn});
@@ -49,8 +48,8 @@ class _LoginPageState extends State<LoginPage>{
         }
         else{
           String userId = await widget.auth.createUser(_email, _password);
-          await Firestore.instance.collection('Users').
-          document(userId).setData({
+          DocumentReference docRef = Firestore.instance.collection("Users").document(userId);
+          await docRef.setData({
             'ProfilePicPath': "",
             'Nome': _username,
             'Nacionalidade': _nacionalidade,
@@ -93,7 +92,6 @@ class _LoginPageState extends State<LoginPage>{
             child: Form(
                 key: formkey,
                 child: ListView(
-                    //crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: buildInputs() + buildSubmits()
                 )
             )
