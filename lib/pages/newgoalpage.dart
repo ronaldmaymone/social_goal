@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NewGoalPage extends StatefulWidget {
-  final ValueChanged<List<Widget>> notifyUpdate;
-  final List<Widget> goalList;
-
-  const NewGoalPage({Key key, this.notifyUpdate, this.goalList}) : super(key: key);
-
+  final userId;
+  final userName;
+  NewGoalPage({this.userId, this.userName});
 
   @override
   _NewGoalPageState createState() => _NewGoalPageState();
@@ -16,29 +18,56 @@ class NewGoalPage extends StatefulWidget {
 class _NewGoalPageState extends State<NewGoalPage> {
   TextEditingController _labelController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
-  String _label;
-  String _description;
+  File _image;
+  Map<String, dynamic> _newData =
+  {"ImgPath": null,"Title": null,"CreatorName": null,"CreatorId": null,
+  "Tag": null, "Description": null};
+
+  Future getImage() async{
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _image = image;
+    });
+  }
 
   _saveLabelAndDesc() async{
-    _label = _labelController.text;
-    debugPrint(_label);
-    _description = _descriptionController.text;
-    debugPrint(_description);
-    widget.goalList.add(_goalWidget(_label, _description));
-    debugPrint("Len inside new goal = "+widget.goalList.length.toString());
-    widget.notifyUpdate(widget.goalList);
+    _newData["Title"] = _labelController.text;
+    _newData["CreatorName"] = widget.userName;
+    _newData["CreatorId"] = widget.userId;
+    //_newdata["Tag"] = _tagController.text;
+    _newData["Description"] = _descriptionController.text;
+    if (_image != null){
+      StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(widget.userId + _newData["Title"]);
+      StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
+      StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+      String temp = await firebaseStorageRef.getDownloadURL();
+      setState(() {
+        _newData['ImgPath'] = temp;
+      });
+      await Firestore.instance.collection("Goals").document().setData(_newData);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true
-        ,title: Text("Novo Objetivo"),),
+        centerTitle: true,
+        title: Text("Novo Objetivo")),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(
           children: <Widget>[
+            Container(
+              child: SizedBox(
+                width: 100,
+                height: 150,
+                child: (_image != null)?Image.file(_image, fit: BoxFit.fill):
+                    RaisedButton(child: Text("Add Objective Image")
+                        ,onPressed: getImage)
+              ),
+            ),
+            Divider(),
             TextFormField(
               maxLines: null,
               decoration: InputDecoration(
