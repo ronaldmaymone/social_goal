@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:social_goal/pages/goalpage.dart';
+import 'package:social_goal/pages/goallistpage.dart';
 //import 'objectivescreen.dart';
 import 'profilescreen.dart';
 import 'feedpage.dart';

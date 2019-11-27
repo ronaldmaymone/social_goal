@@ -56,7 +56,7 @@ class _NewGoalPageState extends State<NewGoalPage> {
             ),
 
             SizedBox(height: 5.0,),
-            _datePicker(context),
+            _startAndFinishPicker(context),
             SizedBox(height: 5.0,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -100,7 +100,7 @@ Widget _goalWidget(String label, String desc){
   );
 }
 
-Widget _datePicker(BuildContext context){
+Widget _startAndFinishPicker(BuildContext context){
   DateField _initialDate = DateField("Data Inicial");
   DateField _finalDate = DateField("Data Final");
   return Column(

@@ -12,15 +12,15 @@ class _GoalPageState extends State<GoalPage> {
   @override
   initState(){
     if (goalList == null) goalList = List();
-    debugPrint("Inside init state and len = "+ goalList.length.toString());
+    //debugPrint("Inside init state and len = "+ goalList.length.toString());
     super.initState();
   }
 
   _updateList(List<Widget> _goalList) {
     setState(() {
-      debugPrint("len of goal list from new = " + _goalList.length.toString());
+      //debugPrint("len of goal list from new = " + _goalList.length.toString());
       goalList = _goalList;
-      debugPrint("Len after updating list = "+goalList.length.toString());
+      //debugPrint("Len after updating list = "+goalList.length.toString());
     });
   }
 
