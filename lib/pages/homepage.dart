@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:social_goal/pages/goalpage.dart';
+import 'package:social_goal/pages/goallistpage.dart';
 import 'profilescreen.dart';
 import 'feedpage.dart';
 import 'package:social_goal/auth.dart';
@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> {
       case 1:
         return new ProfileScreen(usuario: _user);
       case 2:
-        return new GoalPage(userId: _user.id, userName: _user.nome);
+        return new GoalListPage(userId: _user.id, userName: _user.nome);
       default:
         return new Text("Error");
     }

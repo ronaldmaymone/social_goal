@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:social_goal/pages/newgoalpage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class GoalPage extends StatefulWidget {
+class GoalListPage extends StatefulWidget {
   final String userId;
   final String userName;
-  GoalPage({this.userId, this.userName});
+  GoalListPage({this.userId, this.userName});
 
   @override
-  _GoalPageState createState() => _GoalPageState();
+  _GoalListPageState createState() => _GoalListPageState();
 }
 
-class _GoalPageState extends State<GoalPage> {
+class _GoalListPageState extends State<GoalListPage> {
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot document){
     return Card(
