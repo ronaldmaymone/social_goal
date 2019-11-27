@@ -7,6 +7,7 @@ abstract class BaseGoal{
   String get creatorId;
   String get tag;
   String get description;
+  int get likes;
   //TODO: Acidionar  1-Data de inicio e fim. 2-Nº de seguidores. 3- Nº de likes.  4-campo de img
 }
 
@@ -22,4 +23,5 @@ class Goal implements BaseGoal{
   String get creatorId => _goal["CretorId"];
   String get tag => _goal["Tag"];
   String get description => _goal["Description"];
+  int get likes => _goal["Likes"];
 }

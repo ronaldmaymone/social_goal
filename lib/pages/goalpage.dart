@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:social_goal/goal.dart';
 class GoalPage extends StatefulWidget {
-  Goal _goal;
+  Goal goal;
 
-  GoalPage(this._goal);
+  GoalPage({this.goal});
 
   @override
   _GoalPageState createState() => _GoalPageState();

@@ -16,12 +16,13 @@ class NewGoalPage extends StatefulWidget {
 }
 
 class _NewGoalPageState extends State<NewGoalPage> {
+
   TextEditingController _labelController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
   File _image;
   Map<String, dynamic> _newData =
   {"ImgPath": null,"Title": null,"CreatorName": null,"CreatorId": null,
-  "Tag": null, "Description": null};
+  "Tag": null, "Description": null, "Likes": 0, "IniDate": null, "EndDate": null};
 
   Future getImage() async{
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -105,28 +106,6 @@ class _NewGoalPageState extends State<NewGoalPage> {
       ),
     );
   }
-}
-
-Widget _goalWidget(String label, String desc){
-  return Card(
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
-    child: Column(
-      children: <Widget>[
-        Image.asset("assets/images/sucess_image.jpg"),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(label,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),   //TEXT LABEL FROM CONTROLLER ABOVE
-              Divider(),
-              Text(desc)  // TEXT DESCRIPTION FROM ABOVE
-            ],
-          ),
-        )
-      ],
-    ),
-  );
 }
 
 Widget _startAndFinishPicker(BuildContext context){

@@ -163,3 +163,20 @@ class _LoginPageState extends State<LoginPage>{
     }
   }
 }
+
+class TagsPage extends StatefulWidget{
+
+  @override
+  State<StatefulWidget> createState() {
+    return new _TagPageState();
+  }
+}
+class _TagPageState extends State<TagsPage>{
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return null;
+  }
+
+}
