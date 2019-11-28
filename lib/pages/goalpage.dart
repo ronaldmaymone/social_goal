@@ -3,14 +3,31 @@ import 'package:social_goal/goal.dart';
 
 class GoalPage extends StatefulWidget {
   Goal goal;
-
-  GoalPage({this.goal});
+  final String userId;
+  final String userName;
+  GoalPage({this.goal, this.userId, this.userName});
 
   @override
   _GoalPageState createState() => _GoalPageState();
 }
 
 class _GoalPageState extends State<GoalPage> {
+
+  bool _alreadyLiked(){
+    return widget.goal.likedBy.contains(widget.userId);
+  }
+
+  void _incrementOrDecrementLikes(){
+    if (_alreadyLiked()){
+      widget.goal.decrementLike(widget.userId);
+    }
+    else{
+      widget.goal.incrementLike(widget.userId);
+    }
+    setState(() {
+
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,17 +38,16 @@ class _GoalPageState extends State<GoalPage> {
         child: ListView(
           children: <Widget>[
             Image.network(widget.goal.imgPath),
-            Text(widget.goal.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
-            Divider(),
+            Text(widget.goal.title, style: TextStyle(),),
             Text(widget.goal.description, style: TextStyle(),),
             Divider(),
             Row(mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                GestureDetector(child: Icon(Icons.favorite_border), onTap: () {_incrementOrDecrementLikes();},),
-                SizedBox(width: 1.0,),
-                Text(widget.goal.likes == null? "0" : widget.goal.likes.toString()),
-                SizedBox(width: 20.0,),
-                Text("Tag = "+widget.goal.tag)
+                GestureDetector(child: _alreadyLiked()?Icon(Icons.favorite):
+                                    Icon(Icons.favorite_border),
+                  onTap: () {_incrementOrDecrementLikes();},),
+                Text(widget.goal.likes.toString()),
+                Text(widget.goal.tag),
               ],
             )
             // TODO: likes, Tag
@@ -41,7 +57,8 @@ class _GoalPageState extends State<GoalPage> {
     );
   }
 
-  _incrementOrDecrementLikes(){
-    // TODO: update number of likes(increment or decrement)
+  Widget coment(){
+
   }
+
 }

@@ -29,7 +29,7 @@ class _GoalListPageState extends State<GoalListPage> {
                 children: <Widget>[
                   Text(document["Title"],style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
                   Text("Created by ${document["CreatorName"]}",
-                  style: TextStyle(fontStyle: FontStyle.italic,fontSize: 10.0)),
+                      style: TextStyle(fontStyle: FontStyle.italic,fontSize: 10.0)),
                   Divider(),
                   Text(document["Description"])  // TEXT DESCRIPTION FROM ABOVE
                 ],
@@ -38,10 +38,10 @@ class _GoalListPageState extends State<GoalListPage> {
           ],
         ),
       ),
-      onTap: (){
+      onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => GoalPage(goal: Goal(document))),
+          MaterialPageRoute(builder: (context) => GoalPage(goal: Goal(document),userId: widget.userId,userName: widget.userName)),
         );
       },
     );

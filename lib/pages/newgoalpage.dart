@@ -23,7 +23,8 @@ class _NewGoalPageState extends State<NewGoalPage> {
   File _image;
   Map<String, dynamic> _newData =
   {"ImgPath": null,"Title": null,"CreatorName": null,"CreatorId": null,
-  "Tag": null, "Description": null, "Likes": 0, "IniDate": null, "EndDate": null};
+  "Tag": null, "Description": null, "Likes": 0, "LikedBy": [],
+  "IniDate": null, "EndDate": null};
 
   Future getImage() async{
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
