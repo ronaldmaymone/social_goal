@@ -53,6 +53,9 @@ class _FeedPageState extends State<FeedPage> {
 //import 'package:social_goal/goal.dart';
 
 class FeedPage extends StatefulWidget {
+  final String userId;
+  final String userName;
+  FeedPage({this.userId,this.userName});
   @override
   _FeedPageState createState() => _FeedPageState();
 }
@@ -89,7 +92,7 @@ class _FeedPageState extends State<FeedPage> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => GoalPage(goal: Goal(document))),
+          MaterialPageRoute(builder: (context) => GoalPage(goal: Goal(document),userId: widget.userId,userName: widget.userName)),
         );
       },
     );
@@ -101,6 +104,7 @@ class _FeedPageState extends State<FeedPage> {
         body:
         new StreamBuilder(
             stream: Firestore.instance.collection("Goals").snapshots(),
+                    //where("CreatorId",isGreaterThan: widget.userId).snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData){
                 return Scaffold(

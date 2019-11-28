@@ -3,14 +3,31 @@ import 'package:social_goal/goal.dart';
 
 class GoalPage extends StatefulWidget {
   Goal goal;
-
-  GoalPage({this.goal});
+  final String userId;
+  final String userName;
+  GoalPage({this.goal, this.userId, this.userName});
 
   @override
   _GoalPageState createState() => _GoalPageState();
 }
 
 class _GoalPageState extends State<GoalPage> {
+
+  bool _alreadyLiked(){
+    return widget.goal.likedBy.contains(widget.userId);
+  }
+
+  void _incrementOrDecrementLikes(){
+    if (_alreadyLiked()){
+      return;
+    }
+    else{
+      widget.goal.incrementLike(widget.userId);
+    }
+    setState(() {
+
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +43,11 @@ class _GoalPageState extends State<GoalPage> {
             Divider(),
             Row(mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                GestureDetector(child: Icon(Icons.favorite_border), onTap: () {_incrementOrDecrementLikes();},),
+                GestureDetector(child: _alreadyLiked()?Icon(Icons.favorite):
+                                    Icon(Icons.favorite_border),
+                  onTap: () {_incrementOrDecrementLikes();},),
                 Text(widget.goal.likes.toString()),
-                Text(widget.goal.tag)
+                Text(widget.goal.tag),
               ],
             )
             // TODO: likes, Tag
@@ -38,7 +57,8 @@ class _GoalPageState extends State<GoalPage> {
     );
   }
 
-  _incrementOrDecrementLikes(){
-    // TODO: update number of likes(increment or decrement)
+  Widget coment(){
+
   }
+
 }
