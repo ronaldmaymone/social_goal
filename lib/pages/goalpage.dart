@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:social_goal/goal.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -70,11 +71,15 @@ class _GoalPageState extends State<GoalPage> {
                       );
                 }
                 else{
-                  return ListView.builder(
-                  //itemExtent: 80.0,
-                  itemCount: snapshot.data.documents.length,
-                  itemBuilder: (context, index) =>
-                  _buildListItem(context, snapshot.data.documents[index]),
+                  return Container(
+                    width: 300.0,
+                    height: 300.0,
+                    child: ListView.builder(
+                    //itemExtent: 80.0,
+                    itemCount: snapshot.data.documents.length,
+                    itemBuilder: (context, index) =>
+                    _buildListItem(context, snapshot.data.documents[index]),
+                    ),
                   );
                 }
               })
@@ -91,6 +96,9 @@ class _GoalPageState extends State<GoalPage> {
     );
   }
 
+
+
+  Widget _streamBuilder(){}
   Widget _buildListItem(BuildContext context, DocumentSnapshot document){
 
       return Card(
@@ -105,11 +113,11 @@ class _GoalPageState extends State<GoalPage> {
                   Row(
                     children: <Widget>[
                       Text(document["User"],style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
-                      Text(document["Date"],style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
+                      Text(document["Date"].toString(),style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
                     ],
                   ),
-                  Text(document["Message"],
-                      style: TextStyle(fontStyle: FontStyle.italic,fontSize: 10.0)),
+                  Text(document["Message"] == null ? "" : document["Message"],
+                      style: TextStyle(fontStyle: FontStyle.italic,fontSize: 10.0), overflow: TextOverflow.ellipsis,),
                   Divider(),  // TEXT DESCRIPTION FROM ABOVE
                 ],
               ),
@@ -152,7 +160,7 @@ class _CommentState extends State<Comment>{
             decoration: InputDecoration(border: OutlineInputBorder(),
                 labelText: "Digite o seu comentário"),
             controller: _commentController,
-              onChanged: (newvalue){
+              onFieldSubmitted: (newvalue){
                 setState(() {
                   newComment['Message'] = newvalue;
                 });
