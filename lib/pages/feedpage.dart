@@ -92,6 +92,7 @@ class _FeedPageState extends State<FeedPage> {
           MaterialPageRoute(builder: (context) => GoalPage(goal: Goal(document))),
         );
       },
+
     );
   }
 

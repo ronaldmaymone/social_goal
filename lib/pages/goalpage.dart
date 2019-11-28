@@ -21,14 +21,17 @@ class _GoalPageState extends State<GoalPage> {
         child: ListView(
           children: <Widget>[
             Image.network(widget.goal.imgPath),
-            Text(widget.goal.title, style: TextStyle(),),
+            Text(widget.goal.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
+            Divider(),
             Text(widget.goal.description, style: TextStyle(),),
             Divider(),
             Row(mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 GestureDetector(child: Icon(Icons.favorite_border), onTap: () {_incrementOrDecrementLikes();},),
-                Text(widget.goal.likes.toString()),
-                Text(widget.goal.tag)
+                SizedBox(width: 1.0,),
+                Text(widget.goal.likes == null? "0" : widget.goal.likes.toString()),
+                SizedBox(width: 20.0,),
+                Text("Tag = "+widget.goal.tag)
               ],
             )
             // TODO: likes, Tag

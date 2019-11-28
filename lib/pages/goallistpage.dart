@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:social_goal/pages/newgoalpage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:social_goal/pages/goalpage.dart';
+import 'package:social_goal/goal.dart';
 
 class GoalListPage extends StatefulWidget {
   final String userId;
@@ -14,26 +16,34 @@ class GoalListPage extends StatefulWidget {
 class _GoalListPageState extends State<GoalListPage> {
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot document){
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
-      child: Column(
-        children: <Widget>[
-          Image.network(document["ImgPath"]),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(document["Title"],style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
-                Text("Created by ${document["CreatorName"]}",
-                style: TextStyle(fontStyle: FontStyle.italic,fontSize: 10.0)),
-                Divider(),
-                Text(document["Description"])  // TEXT DESCRIPTION FROM ABOVE
-              ],
-            ),
-          )
-        ],
+    return GestureDetector(
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+        child: Column(
+          children: <Widget>[
+            Image.network(document["ImgPath"]),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(document["Title"],style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
+                  Text("Created by ${document["CreatorName"]}",
+                  style: TextStyle(fontStyle: FontStyle.italic,fontSize: 10.0)),
+                  Divider(),
+                  Text(document["Description"])  // TEXT DESCRIPTION FROM ABOVE
+                ],
+              ),
+            )
+          ],
+        ),
       ),
+      onTap: (){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => GoalPage(goal: Goal(document))),
+        );
+      },
     );
   }
 
