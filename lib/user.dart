@@ -7,7 +7,7 @@ abstract class BaseUser{
   String get nacionalidade;
   String get email;
   String get nascimento;
-  List<String> get tags;
+  List<dynamic> get tags;
   List<DocumentReference> get followedGoals;
 
   void updateUser(Map<String, dynamic> newData);
@@ -26,12 +26,19 @@ class User implements BaseUser{
   String get nacionalidade => _usuario['Nacionalidade'];
   String get email => _usuario['Email'];
   String get nascimento => _usuario['Nascimento'];
-  List<String> get tags => _usuario['Tags'];
+  List<dynamic> get tags => _usuario['Tags'];
   List<DocumentReference> get followedGoals => _usuario["FollowedGoals"];
 
   void addGoal(DocumentReference doc) async{
     Map<String, dynamic> data = _usuario.data;
+    data["FollowedGoals"] = new List.from(_usuario["FollowedGoals"]);
     data["FollowedGoals"].add(doc);
+    await _usuario.reference.updateData(data);
+  }
+
+  void editTags(List<dynamic> tags) async{
+    Map<String,dynamic> data = _usuario.data;
+    data['Tags'] = tags;
     await _usuario.reference.updateData(data);
   }
 

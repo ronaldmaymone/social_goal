@@ -8,11 +8,9 @@ import 'package:social_goal/user.dart';
   @override
   _FeedPageState createState() => _FeedPageState();
 }
-
 class _FeedPageState extends State<FeedPage> {
   Goal _goal;
   // TODO: Colocar o retorno do firebase nesse _goal
-
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -54,10 +52,11 @@ class _FeedPageState extends State<FeedPage> {
 //import 'package:social_goal/goal.dart';
 
 class FeedPage extends StatefulWidget {
-  final String userId;
-  final String userName;
+  //final String userId;
+  //final String userName;
   final User user;
-  FeedPage({this.user,this.userId,this.userName});
+  //FeedPage({this.userId,this.userName});
+  FeedPage({this.user});
   @override
   _FeedPageState createState() => _FeedPageState();
 }
@@ -66,7 +65,19 @@ class _FeedPageState extends State<FeedPage> {
   /*
   No firebase existem Goals testes com as Tags: Saúde, Educação, Esporte e Games
    */
-  var usertags = ["Saúde", "Educação", "Esporte"];
+  //var usertags = ["Saúde", "Educação", "Esporte"];
+  var usertags = [];
+
+  @override
+  void initState() {
+    super.initState();
+    if(widget.user.tags.length > 0) {
+      setState(() {
+        usertags = widget.user.tags;
+      });
+    }
+  }
+
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot document){
     return GestureDetector(
@@ -94,14 +105,13 @@ class _FeedPageState extends State<FeedPage> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => GoalPage(goal: Goal(document),userId: widget.userId,userName: widget.userName)),
+          MaterialPageRoute(builder: (context) => GoalPage(goal: Goal(document),userId: widget.user.id,userName: widget.user.nome)),
         );
       },
-      onLongPress: (){
-        widget.user.followedGoals.add(document.reference);
-        createSnackBar("Objetivo seguido!");
-
-      },
+      onLongPress: () {
+        widget.user.addGoal(document.reference);
+        print("Done");
+      }
 
     );
   }
@@ -109,46 +119,35 @@ class _FeedPageState extends State<FeedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body:
-        new StreamBuilder(
-            stream: Firestore.instance.collection("Goals").snapshots(),
-                    //where("CreatorId",isGreaterThan: widget.userId).snapshots(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData){
-                return Scaffold(
-                    body: Container(
-                        alignment: Alignment.center,
-                        child: Column(
-                          children: <Widget>[
-                            Text("Loading Objectives",style: TextStyle(fontWeight: FontWeight.bold)),
-                            CircularProgressIndicator()
-                          ],
-                        )
-                    )
-                );
-              }
-              else {
-                return ListView.builder(
-                  //itemExtent: 80.0,
-                  itemCount: snapshot.data.documents.length,
-                  itemBuilder: (context, index) =>
-                    usertags == null|| usertags.contains(snapshot.data.documents[index]["Tag"])?
-                      _buildListItem(context, snapshot.data.documents[index]):
-                      Container(), //build an empty Widget if tag isn't in usersTag
-                );
-              }
-            }),
+      body:
+      new StreamBuilder(
+          stream: Firestore.instance.collection("Goals").snapshots(),
+          //where("CreatorId",isGreaterThan: widget.userId).snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData){
+              return Scaffold(
+                  body: Container(
+                      alignment: Alignment.center,
+                      child: Column(
+                        children: <Widget>[
+                          Text("Loading Objectives",style: TextStyle(fontWeight: FontWeight.bold)),
+                          CircularProgressIndicator()
+                        ],
+                      )
+                  )
+              );
+            }
+            else {
+              return ListView.builder(
+                //itemExtent: 80.0,
+                itemCount: snapshot.data.documents.length,
+                itemBuilder: (context, index) =>
+                usertags.length < 1|| usertags.contains(snapshot.data.documents[index]["Tag"])?
+                _buildListItem(context, snapshot.data.documents[index]):
+                Container(), //build an empty Widget if tag isn't in usersTag
+              );
+            }
+          }),
     );
   }
-
-  void createSnackBar(String message) {
-    final snackBar = new SnackBar(content: new Text(message),
-        backgroundColor: Colors.green);
-
-    // Find the Scaffold in the Widget tree and use it to show a SnackBar!
-    Scaffold.of(context).showSnackBar(snackBar);
-  }
 }
-
-
-

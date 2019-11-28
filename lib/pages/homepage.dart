@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> {
   _getDrawerItemWidget(int pos) {
     switch (pos) {
       case 0:
-        return new FeedPage(user:_user,userId: _user.id,userName: _user.nome,);
+        return new FeedPage(user: _user);
       case 1:
         return new ProfileScreen(usuario: _user);
       case 2:
@@ -120,14 +120,14 @@ class _HomePageState extends State<HomePage> {
               new UserAccountsDrawerHeader(accountName: new Text(_user.nome),
                   accountEmail: Text(_user.email),
                   currentAccountPicture: CircleAvatar(
-                    child: ClipOval(
-                      child: SizedBox(
-                        width: 100,
-                        height: 100,
-                        child: _user.profilePicPath != ""?Image.network(_user.profilePicPath,
-                            fit: BoxFit.fill):null
+                      child: ClipOval(
+                          child: SizedBox(
+                              width: 100,
+                              height: 100,
+                              child: _user.profilePicPath != ""?Image.network(_user.profilePicPath,
+                                  fit: BoxFit.fill):null
+                          )
                       )
-                    )
                   )
               ),
               new Column(children: drawerOptions)],

@@ -18,8 +18,14 @@ class _TagSelectionPageState extends State<TagSelectionPage> {
   @override
   void initState() {
     super.initState();
-    _userTags = [];     // TODO: Aqui ao invés de criar uma vazia ele busca do firebase, e deixa vazia caso venha null
-//    _myActivitiesResult = '';
+    setState(() {
+      if(widget.user.tags.length > 0){
+        _userTags = widget.user.tags;     // TODO: Aqui ao invés de criar uma vazia ele busca do firebase, e deixa vazia caso venha null
+      }
+      else{
+        _userTags = [];     // TODO: Aqui ao invés de criar uma vazia ele busca do firebase, e deixa vazia caso venha null
+      }
+    });
   }
 
   _saveForm() {
@@ -29,6 +35,7 @@ class _TagSelectionPageState extends State<TagSelectionPage> {
       setState(() {
         //TODO: Implementar aqui o salvamento no Firebase da lista _userTags.  Usa esse print ai pra testar
 //        _myActivitiesResult = _userTags.toString();
+      widget.user.editTags(_userTags);
       for(String _tags in _userTags){
         debugPrint(_tags);
       }
@@ -39,8 +46,9 @@ class _TagSelectionPageState extends State<TagSelectionPage> {
   _deleteTags(){
     //TODO: Como ao tentar salvar uma lista vazia de tags ele nao permite, aqui a gnt deleta as Tags do usuário se ele quiser
     setState(() {
-
+      _userTags = [];
     });
+    widget.user.editTags(_userTags);
   }
 
   @override
@@ -109,7 +117,7 @@ class _TagSelectionPageState extends State<TagSelectionPage> {
               Container(
                 padding: EdgeInsets.all(8),
                 child: RaisedButton(
-                  child: Text('Deletar Tags'),
+                  child: Text('Deletar Todas as Tags'),
                   onPressed: _deleteTags,
                 ),
               ),

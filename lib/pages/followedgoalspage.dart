@@ -52,7 +52,7 @@ class _FollowedGoalPageState extends State<FollowedGoalPage> {
     return Scaffold(
         body:
         ListView.builder(
-    //itemExtent: 80.0,
+          //itemExtent: 80.0,
           itemCount: docs.length,
           itemBuilder: (context, index) => index == 0 ? Center(child: Text("Você ainda não segue nenhum objetivo")) :
           _buildListItem(context, docs[index]),
