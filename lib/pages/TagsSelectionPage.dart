@@ -18,7 +18,7 @@ class _TagSelectionPageState extends State<TagSelectionPage> {
   @override
   void initState() {
     super.initState();
-    _userTags = [];//new List.from(widget.user.tags);     // TODO: Aqui ao invés de criar uma vazia ele busca do firebase, e deixa vazia caso venha null
+    _userTags = [];     // TODO: Aqui ao invés de criar uma vazia ele busca do firebase, e deixa vazia caso venha null
 //    _myActivitiesResult = '';
   }
 
@@ -26,13 +26,12 @@ class _TagSelectionPageState extends State<TagSelectionPage> {
     var form = formKey.currentState;
     if (form.validate()) {
       form.save();
-      //widget.user.editTags(_userTags);
       setState(() {
         //TODO: Implementar aqui o salvamento no Firebase da lista _userTags.  Usa esse print ai pra testar
 //        _myActivitiesResult = _userTags.toString();
-        for(String _tags in _userTags){
-          debugPrint(_tags);
-        }
+      for(String _tags in _userTags){
+        debugPrint(_tags);
+      }
       });
     }
   }
