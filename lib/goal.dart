@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract class BaseGoal{
+  String get id;
   String get imgPath;
   String get title;
   String get creatorName;
@@ -18,7 +19,7 @@ class Goal implements BaseGoal{
   Goal(DocumentSnapshot objetivo){
     this._goal = objetivo;
   }
-
+  String get id => _goal.documentID;
   String get imgPath => _goal["ImgPath"];
   String get title => _goal["Title"];
   String get creatorName => _goal["CreatorName"];
