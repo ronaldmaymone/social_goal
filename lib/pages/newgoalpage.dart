@@ -19,6 +19,7 @@ class _NewGoalPageState extends State<NewGoalPage> {
 
   TextEditingController _labelController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
+  String _tagPicked = "Escolha uma Tag";
   File _image;
   Map<String, dynamic> _newData =
   {"ImgPath": null,"Title": null,"CreatorName": null,"CreatorId": null,
@@ -35,7 +36,8 @@ class _NewGoalPageState extends State<NewGoalPage> {
     _newData["Title"] = _labelController.text;
     _newData["CreatorName"] = widget.userName;
     _newData["CreatorId"] = widget.userId;
-    //_newdata["Tag"] = _tagController.text;
+    debugPrint(_tagPicked+" Was saved");
+    _newData["Tag"] = _tagPicked;
     _newData["Description"] = _descriptionController.text;
     if (_image != null){
       StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(widget.userId + _newData["Title"]);
@@ -51,6 +53,7 @@ class _NewGoalPageState extends State<NewGoalPage> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("Tag picked = "+_tagPicked);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -87,7 +90,42 @@ class _NewGoalPageState extends State<NewGoalPage> {
 
             SizedBox(height: 5.0,),
             _startAndFinishPicker(context),
-            SizedBox(height: 5.0,),
+            SizedBox(height: 10.0,),
+            DropdownButton<String>(
+              hint: Text(_tagPicked),
+              items: [
+                DropdownMenuItem(
+                  value: "Saúde",
+                  child: Text(
+                    "Saúde",
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: "Educação",
+                  child: Text(
+                    "Educação",
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: "Esporte",
+                  child: Text(
+                    "Esporte",
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: "Games",
+                  child: Text(
+                    "Games",
+                  ),
+                ),
+              ],
+              onChanged: (value) {
+                setState(() {
+                  _tagPicked = value;
+                });
+              },
+            ),
+            SizedBox(height: 10.0,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -108,6 +146,44 @@ class _NewGoalPageState extends State<NewGoalPage> {
   }
 }
 
+//Widget _tagPicker(String _tagPicked, BuildContext context){
+//  return DropdownButton<String>(
+//    hint: Text(_tagPicked),
+//    items: [
+//      DropdownMenuItem(
+//        value: "Saúde",
+//        child: Text(
+//          "Saúde",
+//        ),
+//      ),
+//      DropdownMenuItem(
+//        value: "Educação",
+//        child: Text(
+//          "Educação",
+//        ),
+//      ),
+//      DropdownMenuItem(
+//        value: "Esporte",
+//        child: Text(
+//          "Esporte",
+//        ),
+//      ),
+//      DropdownMenuItem(
+//        value: "Games",
+//        child: Text(
+//          "Games",
+//        ),
+//      ),
+//    ],
+//    onChanged: (value) {
+//      setState(() {
+//        _tagPicked = value;
+//      });
+//    },
+//
+//  );
+//}
+
 Widget _startAndFinishPicker(BuildContext context){
   DateField _initialDate = DateField("Data Inicial");
   DateField _finalDate = DateField("Data Final");
@@ -122,7 +198,7 @@ Widget _startAndFinishPicker(BuildContext context){
 }
 
 class DateField extends StatelessWidget {
-  String title;
+  final String title;
 
   DateField(this.title);
   final format = DateFormat("yyyy-MM-dd");
