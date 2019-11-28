@@ -8,7 +8,7 @@ abstract class BaseUser{
   String get email;
   String get nascimento;
   List<dynamic> get tags;
-  List<DocumentReference> get followedGoals;
+  List<dynamic> get followedGoals;
 
   void updateUser(Map<String, dynamic> newData);
 }
@@ -27,9 +27,9 @@ class User implements BaseUser{
   String get email => _usuario['Email'];
   String get nascimento => _usuario['Nascimento'];
   List<dynamic> get tags => _usuario['Tags'];
-  List<DocumentReference> get followedGoals => _usuario["FollowedGoals"];
+  List<dynamic> get followedGoals => _usuario["FollowedGoals"];
 
-  void addGoal(DocumentReference doc) async{
+  void addGoal(String doc) async{
     Map<String, dynamic> data = _usuario.data;
     data["FollowedGoals"] = new List.from(_usuario["FollowedGoals"]);
     data["FollowedGoals"].add(doc);
