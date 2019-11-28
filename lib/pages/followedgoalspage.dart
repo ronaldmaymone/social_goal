@@ -39,8 +39,10 @@ class _FollowedGoalPageState extends State<FollowedGoalPage> {
 
   Future<void> getDocsSnap() async {
     if (widget.user.followedGoals.length >= 1) {
+      debugPrint("RETORNEI MAIS OU IGUAL A 1 FOLLOWED GOAL");
       for (String docId in widget.user.followedGoals) {
         DocumentSnapshot ref = await Firestore.instance.collection("Goals").document(docId).get();
+        debugPrint("Referência = "+ref.toString());
         docs.add(ref);
       }
     }

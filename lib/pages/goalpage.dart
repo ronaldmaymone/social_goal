@@ -39,7 +39,7 @@ class _GoalPageState extends State<GoalPage> {
         child: ListView(
           children: <Widget>[
             Image.network(widget.goal.imgPath),
-            Text(widget.goal.title, style: TextStyle(),),
+            Text(widget.goal.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),),
             Text(widget.goal.description, style: TextStyle(),),
             Divider(),
             Row(mainAxisAlignment: MainAxisAlignment.start,
@@ -52,30 +52,30 @@ class _GoalPageState extends State<GoalPage> {
                 Text(widget.goal.tag),
               ],
             ),
-           StreamBuilder(
-                stream: widget.goal.coments.orderBy("Date",descending: true).snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData){
-                      return Scaffold(
-                        body: Container(
-                          alignment: Alignment.center,
-                          child: Column(children: <Widget>[
-                              Text("Loading Comments",style: TextStyle(fontWeight: FontWeight.bold)),
-                              CircularProgressIndicator()
-                              ],
-                            )
-                          )
-                      );
-                }
-                else{
-                  return ListView.builder(
-                  //itemExtent: 80.0,
-                  itemCount: snapshot.data.documents.length,
-                  itemBuilder: (context, index) =>
-                  _buildListItem(context, snapshot.data.documents[index]),
-                  );
-                }
-              })
+//           StreamBuilder(
+//                stream: widget.goal.coments.orderBy("Date",descending: true).snapshots(),
+//                builder: (context, snapshot) {
+//                  if (!snapshot.hasData){
+//                      return Scaffold(
+//                        body: Container(
+//                          alignment: Alignment.center,
+//                          child: Column(children: <Widget>[
+//                              Text("Loading Comments",style: TextStyle(fontWeight: FontWeight.bold)),
+//                              CircularProgressIndicator()
+//                              ],
+//                            )
+//                          )
+//                      );
+//                }
+//                else{
+//                  return ListView.builder(
+//                  //itemExtent: 80.0,
+//                  itemCount: snapshot.data.documents.length,
+//                  itemBuilder: (context, index) =>
+//                  _buildListItem(context, snapshot.data.documents[index]),
+//                  );
+//                }
+//              })
           ],
         ),
       ),

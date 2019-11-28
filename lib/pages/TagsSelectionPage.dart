@@ -19,11 +19,13 @@ class _TagSelectionPageState extends State<TagSelectionPage> {
   void initState() {
     super.initState();
     setState(() {
-      if(widget.user.tags.length > 0){
+      if(widget.user.tags.length >= 1){
+        debugPrint("Estou no primeiro if e por isso buguei a porra toda!!");
+        debugPrint("Lenght dessa porra = "+widget.user.tags.length.toString());
         _userTags = widget.user.tags;     // TODO: Aqui ao invés de criar uma vazia ele busca do firebase, e deixa vazia caso venha null
       }
       else{
-        _userTags = [];     // TODO: Aqui ao invés de criar uma vazia ele busca do firebase, e deixa vazia caso venha null
+        _userTags = [];    // TODO: Aqui ao invés de criar uma vazia ele busca do firebase, e deixa vazia caso venha null
       }
     });
   }
@@ -79,20 +81,23 @@ class _TagSelectionPageState extends State<TagSelectionPage> {
                       "display": "Educação",
                       "value": "Educação",
                     },
+
                     {
                       "display": "Saúde",
                       "value": "Saúde",
                     },
+
                     {
                       "display": "Esporte",
                       "value": "Esporte",
                     },
+
                     {
                       "display": "Games",
                       "value": "Games",
                     },
                   ],
-                  textField: 'display',
+                  textField: "display",
                   valueField: 'value',
                   okButtonLabel: 'OK',
                   cancelButtonLabel: 'CANCEL',
