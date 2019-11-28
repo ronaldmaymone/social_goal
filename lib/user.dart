@@ -31,14 +31,15 @@ class User implements BaseUser{
 
   void addGoal(DocumentReference doc) async{
     Map<String, dynamic> data = _usuario.data;
+    data["FollowedGoals"] = new List.from(_usuario["FollowedGoals"]);
     data["FollowedGoals"].add(doc);
     await _usuario.reference.updateData(data);
   }
 
-  void editTags(List<String> tags) async{
+  void editTags(List<dynamic> tags) async{
     Map<String,dynamic> data = _usuario.data;
     data['Tags'] = tags;
-    await _usuario.reference.setData(data);
+    await _usuario.reference.updateData(data);
   }
 
   //Atualiza o Usuario no  BD

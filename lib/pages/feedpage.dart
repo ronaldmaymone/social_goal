@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import 'package:social_goal/goal.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_goal/pages/goalpage.dart';
+import 'package:social_goal/user.dart';
 
 /*class FeedPage extends StatefulWidget {
   @override
@@ -51,9 +52,11 @@ class _FeedPageState extends State<FeedPage> {
 //import 'package:social_goal/goal.dart';
 
 class FeedPage extends StatefulWidget {
-  final String userId;
-  final String userName;
-  FeedPage({this.userId,this.userName});
+  //final String userId;
+  //final String userName;
+  final User user;
+  //FeedPage({this.userId,this.userName});
+  FeedPage({this.user});
   @override
   _FeedPageState createState() => _FeedPageState();
 }
@@ -62,7 +65,19 @@ class _FeedPageState extends State<FeedPage> {
   /*
   No firebase existem Goals testes com as Tags: Saúde, Educação, Esporte e Games
    */
-  var usertags = ["Saúde", "Educação", "Esporte"];
+  //var usertags = ["Saúde", "Educação", "Esporte"];
+  var usertags = [];
+
+  @override
+  void initState() {
+    super.initState();
+    if(widget.user.tags.length > 0) {
+      setState(() {
+        usertags = widget.user.tags;
+      });
+    }
+  }
+
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot document){
     return GestureDetector(
@@ -90,9 +105,13 @@ class _FeedPageState extends State<FeedPage> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => GoalPage(goal: Goal(document),userId: widget.userId,userName: widget.userName)),
+          MaterialPageRoute(builder: (context) => GoalPage(goal: Goal(document),userId: widget.user.id,userName: widget.user.nome)),
         );
       },
+      onLongPress: () {
+        widget.user.addGoal(document.reference);
+        print("Done");
+      }
 
     );
   }
@@ -123,7 +142,7 @@ class _FeedPageState extends State<FeedPage> {
                 //itemExtent: 80.0,
                 itemCount: snapshot.data.documents.length,
                 itemBuilder: (context, index) =>
-                usertags == null|| usertags.contains(snapshot.data.documents[index]["Tag"])?
+                usertags.length < 1|| usertags.contains(snapshot.data.documents[index]["Tag"])?
                 _buildListItem(context, snapshot.data.documents[index]):
                 Container(), //build an empty Widget if tag isn't in usersTag
               );
