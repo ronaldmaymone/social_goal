@@ -19,7 +19,7 @@ class _GoalPageState extends State<GoalPage> {
 
   void _incrementOrDecrementLikes(){
     if (_alreadyLiked()){
-      return;
+      widget.goal.decrementLike(widget.userId);
     }
     else{
       widget.goal.incrementLike(widget.userId);
