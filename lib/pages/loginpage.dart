@@ -55,7 +55,8 @@ class _LoginPageState extends State<LoginPage>{
             'Nacionalidade': _nacionalidade,
             'Nascimento': _birthDate,
             'Email': _email,
-            'Tags': null});
+            'Tags': null,
+            'FollowedGoals': []});
           print('Registered user: ${userId}');
         }
         widget.onSignedIn();

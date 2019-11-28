@@ -7,6 +7,7 @@ abstract class BaseUser{
   String get nacionalidade;
   String get email;
   String get nascimento;
+  List<DocumentReference> get followedGoals;
 
   void updateUser(Map<String, dynamic> newData);
 }
@@ -24,6 +25,7 @@ class User implements BaseUser{
   String get nacionalidade => _usuario['Nacionalidade'];
   String get email => _usuario['Email'];
   String get nascimento => _usuario['Nascimento'];
+  List<DocumentReference> get followedGoals => _usuario["FollowedGoals"];
 
   //Atualiza o Usuario no  BD
   void updateUser(Map<String, dynamic> newData) async{
