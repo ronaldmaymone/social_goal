@@ -14,6 +14,7 @@ class GoalPage extends StatefulWidget {
 
 class _GoalPageState extends State<GoalPage> {
 
+
   bool _alreadyLiked(){
     return widget.goal.likedBy.contains(widget.userId);
   }
@@ -52,30 +53,31 @@ class _GoalPageState extends State<GoalPage> {
                 Text(widget.goal.tag),
               ],
             ),
-//           StreamBuilder(
-//                stream: widget.goal.coments.orderBy("Date",descending: true).snapshots(),
-//                builder: (context, snapshot) {
-//                  if (!snapshot.hasData){
-//                      return Scaffold(
-//                        body: Container(
-//                          alignment: Alignment.center,
-//                          child: Column(children: <Widget>[
-//                              Text("Loading Comments",style: TextStyle(fontWeight: FontWeight.bold)),
-//                              CircularProgressIndicator()
-//                              ],
-//                            )
-//                          )
-//                      );
-//                }
-//                else{
-//                  return ListView.builder(
-//                  //itemExtent: 80.0,
-//                  itemCount: snapshot.data.documents.length,
-//                  itemBuilder: (context, index) =>
-//                  _buildListItem(context, snapshot.data.documents[index]),
-//                  );
-//                }
-//              })
+           SizedBox(height: 20),
+           StreamBuilder(
+                stream: widget.goal.coments.snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData){
+                      return Scaffold(
+                        body: Container(
+                          alignment: Alignment.center,
+                          child: Column(children: <Widget>[
+                              Text("Loading Comments",style: TextStyle(fontWeight: FontWeight.bold)),
+                              CircularProgressIndicator()
+                              ],
+                            )
+                          )
+                      );
+                }
+                else{
+                  return ListView.builder(
+                  //itemExtent: 80.0,
+                  itemCount: snapshot.data.documents.length,
+                  itemBuilder: (context, index) =>
+                  _buildListItem(context, snapshot.data.documents[index]),
+                  );
+                }
+              })
           ],
         ),
       ),
@@ -90,8 +92,8 @@ class _GoalPageState extends State<GoalPage> {
   }
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot document){
-    return GestureDetector(
-      child: Card(
+
+      return Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
         child: Column(
           children: <Widget>[
@@ -114,8 +116,7 @@ class _GoalPageState extends State<GoalPage> {
             )
           ],
         ),
-      )
-    );
+      );
   }
 }
 
@@ -129,13 +130,15 @@ class Comment extends StatefulWidget{
 }
 
 class _CommentState extends State<Comment>{
+  Map<String,dynamic> newComment = {"Date": null, "Message":null, "User": null};
   TextEditingController _commentController;
 
   _saveComment() async{
-    Map<String,dynamic> newComment = {
-      "Date": DateTime.now(), "Message": _commentController.text,
-      "User": widget.userName};
-    await widget.goal.coments.add(newComment);
+    //debugPrint(_commentController.text);
+    newComment["Date"] = DateTime.now();
+    newComment["User"] = widget.userName;
+    //newComment["Message"] = _commentController.text;
+    await widget.goal.coments.document(widget.goal.id).setData(newComment);
   }
 
   @override
@@ -149,6 +152,11 @@ class _CommentState extends State<Comment>{
             decoration: InputDecoration(border: OutlineInputBorder(),
                 labelText: "Digite o seu comentário"),
             controller: _commentController,
+              onChanged: (newvalue){
+                setState(() {
+                  newComment['Message'] = newvalue;
+                });
+              },
           ),
           RaisedButton(
               color: Colors.blue,
