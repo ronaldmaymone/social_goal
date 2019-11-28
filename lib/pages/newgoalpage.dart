@@ -86,7 +86,7 @@ class _NewGoalPageState extends State<NewGoalPage> {
             ),
 
             SizedBox(height: 5.0,),
-            _startAndFinishPicker(context),
+            _startAndFinishPicker(context,_newData),
             SizedBox(height: 5.0,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -108,9 +108,9 @@ class _NewGoalPageState extends State<NewGoalPage> {
   }
 }
 
-Widget _startAndFinishPicker(BuildContext context){
-  DateField _initialDate = DateField("Data Inicial");
-  DateField _finalDate = DateField("Data Final");
+Widget _startAndFinishPicker(BuildContext context, Map<String,dynamic> data){
+  DateField _initialDate = DateField("Data Inicial",data);
+  DateField _finalDate = DateField("Data Final",data);
   return Column(
     mainAxisAlignment: MainAxisAlignment.start,
     children: <Widget>[
@@ -123,15 +123,19 @@ Widget _startAndFinishPicker(BuildContext context){
 
 class DateField extends StatelessWidget {
   String title;
-
-  DateField(this.title);
+  Map<String,dynamic> data;
+  DateField(this.title, this.data);
   final format = DateFormat("yyyy-MM-dd");
   @override
   Widget build(BuildContext context) {
     return DateTimeField(
       decoration: InputDecoration(
           border: OutlineInputBorder(),
-          labelText: title),
+          labelText: title,),
+      onChanged: (value){
+        title == "Data Inicial"? data['IniDate'] = value:
+            data['EndDate'] = value;
+      },
       format: format,
       onShowPicker: (context, currentValue) {
         return showDatePicker(
