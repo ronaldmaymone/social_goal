@@ -84,7 +84,7 @@ class _LoginPageState extends State<LoginPage>{
     return new Scaffold(
         appBar: new AppBar(
             title: Center(
-              child: new Text('Login',
+              child: new Text(_formType == FormType.login ? 'Login' : 'Registrar',
                 style: TextStyle(fontStyle: FontStyle.italic),
               ),
             )
@@ -105,30 +105,30 @@ class _LoginPageState extends State<LoginPage>{
     List<Widget> listinha =
     [TextFormField(
         decoration: InputDecoration(labelText: 'Email'),
-        validator: (value)=>value.isEmpty? 'Email can t be empty':null,
+        validator: (value)=>value.isEmpty? 'Email não pode estar vazio':null,
         onSaved: (value)=> _email = value
     ),
       TextFormField(
-          decoration: InputDecoration(labelText: 'Password'),
+          decoration: InputDecoration(labelText: 'Senha'),
           obscureText: true,
-          validator: (value)=>value.isEmpty? 'Password can t be empty':null,
+          validator: (value)=>value.isEmpty? 'Senha não pode estar vazio':null,
           onSaved: (value)=> _password = value
       ),];
     if (_formType == FormType.register){
       listinha.insertAll(0,
           [TextFormField(
-              decoration: InputDecoration(labelText: 'Username'),
-              validator: (value)=>value.isEmpty? 'Username can t be empty':null,
+              decoration: InputDecoration(labelText: 'Nome de Usuário'),
+              validator: (value)=>value.isEmpty? 'Nome de usário não pode estar vazio':null,
               onSaved: (value)=> _username = value
           ),
             TextFormField(
-                decoration: InputDecoration(labelText: 'Birth Date'),
-                validator: (value)=>value.isEmpty? 'Birth Date can t be empty':null,
+                decoration: InputDecoration(labelText: 'Nascimento'),
+                validator: (value)=>value.isEmpty? 'Nascimento não pode estar vazio':null,
                 onSaved: (value)=> _birthDate = value
             ),
             TextFormField(
                 decoration: InputDecoration(labelText: 'Nacionalidade'),
-                validator: (value)=>value.isEmpty? 'Nacionalidade can t be empty':null,
+                validator: (value)=>value.isEmpty? 'Nacionalidade não pode estar vazio':null,
                 onSaved: (value)=> _nacionalidade = value
             ),]
       );
@@ -141,12 +141,12 @@ class _LoginPageState extends State<LoginPage>{
       return [
         RaisedButton(
           onPressed: validateAndSubmit,
-          child: new Text('Submit'),
+          child: new Text('Enviar'),
           highlightColor: Theme.of(context).accentColor,
         ),
         FlatButton(
             onPressed: moveToRegister,
-            child: new Text('Create an account')
+            child: new Text('Criar Conta')
         )
       ];
     }
@@ -154,31 +154,14 @@ class _LoginPageState extends State<LoginPage>{
       return [
         RaisedButton(
           onPressed: validateAndSubmit,
-          child: new Text('Create an account'),
+          child: new Text('Criar Conta'),
           highlightColor: Theme.of(context).accentColor,
         ),
         FlatButton(
             onPressed: moveToLogin,
-            child: new Text('Have an account? Login')
+            child: new Text('Já possui uma conta? Login')
         )
       ];
     }
   }
-}
-
-class TagsPage extends StatefulWidget{
-
-  @override
-  State<StatefulWidget> createState() {
-    return new _TagPageState();
-  }
-}
-class _TagPageState extends State<TagsPage>{
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return null;
-  }
-
 }

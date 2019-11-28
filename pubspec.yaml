@@ -31,6 +31,7 @@ dependencies:
   firebase_core: ^0.4.0+9
   firebase_analytics: ^5.0.2
   datetime_picker_formfield: ^0.4.3
+  multiselect_formfield: ^0.1.2
 
 dev_dependencies:
   flutter_test:
