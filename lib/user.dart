@@ -27,6 +27,12 @@ class User implements BaseUser{
   String get nascimento => _usuario['Nascimento'];
   List<DocumentReference> get followedGoals => _usuario["FollowedGoals"];
 
+  void addGoal(DocumentReference doc) async{
+    Map<String, dynamic> data = _usuario.data;
+    data["FollowedGoals"].add(doc);
+    await _usuario.reference.updateData(data);
+  }
+
   //Atualiza o Usuario no  BD
   void updateUser(Map<String, dynamic> newData) async{
     Map<String, dynamic> data = _usuario.data;
