@@ -5,6 +5,8 @@ import 'feedpage.dart';
 import 'package:social_goal/auth.dart';
 import 'package:social_goal/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:social_goal/pages/followedgoalspage.dart';
+import 'package:social_goal/pages/TagsSelectionPage.dart';
 
 class DrawerItem {
   String title;
@@ -21,7 +23,8 @@ class HomePage extends StatefulWidget {
   final drawerItems = [
     new DrawerItem("Feed", Icons.rss_feed),
     new DrawerItem("Meu Perfil", Icons.account_circle),
-    new DrawerItem("Objetivos", Icons.arrow_upward),
+    new DrawerItem("Meus Objetivos", Icons.arrow_upward),
+    new DrawerItem("Objetivos seguidos", Icons.sync),
   ];
 
   @override
@@ -65,6 +68,8 @@ class _HomePageState extends State<HomePage> {
         return new ProfileScreen(usuario: _user);
       case 2:
         return new GoalListPage(userId: _user.id, userName: _user.nome);
+      case 3:
+        return new FollowedGoalPage(user: _user,);
       default:
         return new Text("Error");
     }
@@ -93,7 +98,16 @@ class _HomePageState extends State<HomePage> {
         appBar: new AppBar(
           title: new Text(widget.drawerItems[_selectedDrawerIndex].title),
           actions: <Widget>[
-            new FlatButton(
+            FlatButton(
+              onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TagSelectionPage(user: _user)),
+                );
+              },
+              child: Text("Tags", style: new TextStyle(fontSize: 17.0, color: Colors.white)),
+            ),
+            FlatButton(
                 onPressed: _signOut,
                 child: new Text('Logout',
                     style: new TextStyle(fontSize: 17.0, color: Colors.white))
@@ -106,14 +120,14 @@ class _HomePageState extends State<HomePage> {
               new UserAccountsDrawerHeader(accountName: new Text(_user.nome),
                   accountEmail: Text(_user.email),
                   currentAccountPicture: CircleAvatar(
-                    child: ClipOval(
-                      child: SizedBox(
-                        width: 100,
-                        height: 100,
-                        child: _user.profilePicPath != ""?Image.network(_user.profilePicPath,
-                            fit: BoxFit.fill):null
+                      child: ClipOval(
+                          child: SizedBox(
+                              width: 100,
+                              height: 100,
+                              child: _user.profilePicPath != ""?Image.network(_user.profilePicPath,
+                                  fit: BoxFit.fill):null
+                          )
                       )
-                    )
                   )
               ),
               new Column(children: drawerOptions)],

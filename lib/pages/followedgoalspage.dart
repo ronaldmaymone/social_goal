@@ -11,7 +11,7 @@ class FollowedGoalPage extends StatefulWidget {
 }
 
 class _FollowedGoalPageState extends State<FollowedGoalPage> {
-  List<DocumentSnapshot> docs;
+  List<DocumentSnapshot> docs = List();
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot document){
     return Card(
@@ -37,21 +37,24 @@ class _FollowedGoalPageState extends State<FollowedGoalPage> {
     );
   }
 
-  Future<void> getDocsSnap() async{
-    for(DocumentReference docRef in widget.user.followedGoals){
-      docs.add(await docRef.get());
+  Future<void> getDocsSnap() async {
+    if (widget.user.followedGoals != null) {
+      for (DocumentReference docRef in widget.user.followedGoals) {
+        docs.add(await docRef.get());
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     getDocsSnap();
+    debugPrint("Len docs = "+docs.length.toString());
     return Scaffold(
         body:
         ListView.builder(
-    //itemExtent: 80.0,
+          //itemExtent: 80.0,
           itemCount: docs.length,
-          itemBuilder: (context, index) =>
+          itemBuilder: (context, index) => index == 0 ? Center(child: Text("Você ainda não segue nenhum objetivo")) :
           _buildListItem(context, docs[index]),
         )
     );

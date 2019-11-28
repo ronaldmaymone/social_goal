@@ -7,11 +7,9 @@ import 'package:social_goal/pages/goalpage.dart';
   @override
   _FeedPageState createState() => _FeedPageState();
 }
-
 class _FeedPageState extends State<FeedPage> {
   Goal _goal;
   // TODO: Colocar o retorno do firebase nesse _goal
-
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -95,44 +93,42 @@ class _FeedPageState extends State<FeedPage> {
           MaterialPageRoute(builder: (context) => GoalPage(goal: Goal(document),userId: widget.userId,userName: widget.userName)),
         );
       },
+
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body:
-        new StreamBuilder(
-            stream: Firestore.instance.collection("Goals").snapshots(),
-                    //where("CreatorId",isGreaterThan: widget.userId).snapshots(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData){
-                return Scaffold(
-                    body: Container(
-                        alignment: Alignment.center,
-                        child: Column(
-                          children: <Widget>[
-                            Text("Loading Objectives",style: TextStyle(fontWeight: FontWeight.bold)),
-                            CircularProgressIndicator()
-                          ],
-                        )
-                    )
-                );
-              }
-              else {
-                return ListView.builder(
-                  //itemExtent: 80.0,
-                  itemCount: snapshot.data.documents.length,
-                  itemBuilder: (context, index) =>
-                    usertags == null|| usertags.contains(snapshot.data.documents[index]["Tag"])?
-                      _buildListItem(context, snapshot.data.documents[index]):
-                      Container(), //build an empty Widget if tag isn't in usersTag
-                );
-              }
-            }),
+      body:
+      new StreamBuilder(
+          stream: Firestore.instance.collection("Goals").snapshots(),
+          //where("CreatorId",isGreaterThan: widget.userId).snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData){
+              return Scaffold(
+                  body: Container(
+                      alignment: Alignment.center,
+                      child: Column(
+                        children: <Widget>[
+                          Text("Loading Objectives",style: TextStyle(fontWeight: FontWeight.bold)),
+                          CircularProgressIndicator()
+                        ],
+                      )
+                  )
+              );
+            }
+            else {
+              return ListView.builder(
+                //itemExtent: 80.0,
+                itemCount: snapshot.data.documents.length,
+                itemBuilder: (context, index) =>
+                usertags == null|| usertags.contains(snapshot.data.documents[index]["Tag"])?
+                _buildListItem(context, snapshot.data.documents[index]):
+                Container(), //build an empty Widget if tag isn't in usersTag
+              );
+            }
+          }),
     );
   }
 }
-
-
-
