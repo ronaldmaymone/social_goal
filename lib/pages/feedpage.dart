@@ -109,7 +109,8 @@ class _FeedPageState extends State<FeedPage> {
         );
       },
       onLongPress: () {
-        widget.user.addGoal(document.reference);
+        //widget.user.addGoal(document.reference);
+        widget.user.addGoal(document.documentID);
         print("Done");
       }
 

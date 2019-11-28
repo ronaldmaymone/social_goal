@@ -38,9 +38,10 @@ class _FollowedGoalPageState extends State<FollowedGoalPage> {
   }
 
   Future<void> getDocsSnap() async {
-    if (widget.user.followedGoals != null) {
-      for (DocumentReference docRef in widget.user.followedGoals) {
-        docs.add(await docRef.get());
+    if (widget.user.followedGoals.length >= 1) {
+      for (String docId in widget.user.followedGoals) {
+        DocumentSnapshot ref = await Firestore.instance.collection("Goals").document(docId).get();
+        docs.add(ref);
       }
     }
   }
@@ -48,13 +49,12 @@ class _FollowedGoalPageState extends State<FollowedGoalPage> {
   @override
   Widget build(BuildContext context) {
     getDocsSnap();
-    debugPrint("Len docs = "+docs.length.toString());
     return Scaffold(
         body:
         ListView.builder(
           //itemExtent: 80.0,
-          itemCount: docs.length,
-          itemBuilder: (context, index) => index == 0 ? Center(child: Text("Você ainda não segue nenhum objetivo")) :
+          itemCount: widget.user.followedGoals.length,
+          itemBuilder: (context, index) => widget.user.followedGoals.length == 0 ? Center(child: Text("Você ainda não segue nenhum objetivo")) :
           _buildListItem(context, docs[index]),
         )
     );
