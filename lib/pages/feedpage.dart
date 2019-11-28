@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import 'package:social_goal/goal.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_goal/pages/goalpage.dart';
+import 'package:social_goal/user.dart';
 
 /*class FeedPage extends StatefulWidget {
   @override
@@ -55,7 +56,8 @@ class _FeedPageState extends State<FeedPage> {
 class FeedPage extends StatefulWidget {
   final String userId;
   final String userName;
-  FeedPage({this.userId,this.userName});
+  final User user;
+  FeedPage({this.user,this.userId,this.userName});
   @override
   _FeedPageState createState() => _FeedPageState();
 }
@@ -95,6 +97,11 @@ class _FeedPageState extends State<FeedPage> {
           MaterialPageRoute(builder: (context) => GoalPage(goal: Goal(document),userId: widget.userId,userName: widget.userName)),
         );
       },
+      onLongPress: (){
+        widget.user.followedGoals.add(document.reference);
+        createSnackBar("Objetivo seguido!");
+
+      },
 
     );
   }
@@ -132,6 +139,14 @@ class _FeedPageState extends State<FeedPage> {
               }
             }),
     );
+  }
+
+  void createSnackBar(String message) {
+    final snackBar = new SnackBar(content: new Text(message),
+        backgroundColor: Colors.green);
+
+    // Find the Scaffold in the Widget tree and use it to show a SnackBar!
+    Scaffold.of(context).showSnackBar(snackBar);
   }
 }
 

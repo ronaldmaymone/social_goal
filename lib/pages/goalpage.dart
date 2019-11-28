@@ -47,6 +47,7 @@ class _GoalPageState extends State<GoalPage> {
                                     Icon(Icons.favorite_border),
                   onTap: () {_incrementOrDecrementLikes();},),
                 Text(widget.goal.likes.toString()),
+                SizedBox(width: 20.0,),
                 Text(widget.goal.tag),
               ],
             )

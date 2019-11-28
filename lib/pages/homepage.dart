@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> {
   _getDrawerItemWidget(int pos) {
     switch (pos) {
       case 0:
-        return new FeedPage(userId: _user.id,userName: _user.nome,);
+        return new FeedPage(user:_user,userId: _user.id,userName: _user.nome,);
       case 1:
         return new ProfileScreen(usuario: _user);
       case 2:

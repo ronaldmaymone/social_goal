@@ -80,8 +80,8 @@ class _TagSelectionPageState extends State<TagSelectionPage> {
                       "value": "Esporte",
                     },
                     {
-                      "display": "Game",
-                      "value": "Game",
+                      "display": "Games",
+                      "value": "Games",
                     },
                   ],
                   textField: 'display',
