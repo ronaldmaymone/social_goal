@@ -89,7 +89,7 @@ class _NewGoalPageState extends State<NewGoalPage> {
             ),
 
             SizedBox(height: 5.0,),
-            _startAndFinishPicker(context),
+            _startAndFinishPicker(context,_newData),
             SizedBox(height: 10.0,),
             DropdownButton<String>(
               hint: Text(_tagPicked),
@@ -146,47 +146,9 @@ class _NewGoalPageState extends State<NewGoalPage> {
   }
 }
 
-//Widget _tagPicker(String _tagPicked, BuildContext context){
-//  return DropdownButton<String>(
-//    hint: Text(_tagPicked),
-//    items: [
-//      DropdownMenuItem(
-//        value: "Saúde",
-//        child: Text(
-//          "Saúde",
-//        ),
-//      ),
-//      DropdownMenuItem(
-//        value: "Educação",
-//        child: Text(
-//          "Educação",
-//        ),
-//      ),
-//      DropdownMenuItem(
-//        value: "Esporte",
-//        child: Text(
-//          "Esporte",
-//        ),
-//      ),
-//      DropdownMenuItem(
-//        value: "Games",
-//        child: Text(
-//          "Games",
-//        ),
-//      ),
-//    ],
-//    onChanged: (value) {
-//      setState(() {
-//        _tagPicked = value;
-//      });
-//    },
-//
-//  );
-//}
-
-Widget _startAndFinishPicker(BuildContext context){
-  DateField _initialDate = DateField("Data Inicial");
-  DateField _finalDate = DateField("Data Final");
+Widget _startAndFinishPicker(BuildContext context, Map<String,dynamic> data){
+  DateField _initialDate = DateField("Data Inicial", data);
+  DateField _finalDate = DateField("Data Final", data);
   return Column(
     mainAxisAlignment: MainAxisAlignment.start,
     children: <Widget>[
@@ -200,14 +162,19 @@ Widget _startAndFinishPicker(BuildContext context){
 class DateField extends StatelessWidget {
   final String title;
 
-  DateField(this.title);
+  Map<String,dynamic> data;
+  DateField(this.title, this.data);
   final format = DateFormat("yyyy-MM-dd");
   @override
   Widget build(BuildContext context) {
     return DateTimeField(
       decoration: InputDecoration(
           border: OutlineInputBorder(),
-          labelText: title),
+          labelText: title,),
+      onChanged: (value){
+        title == "Data Inicial"? data['IniDate'] = value:
+            data['EndDate'] = value;
+      },
       format: format,
       onShowPicker: (context, currentValue) {
         return showDatePicker(

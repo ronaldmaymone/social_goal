@@ -119,8 +119,8 @@ class _FeedPageState extends State<FeedPage> {
                 return ListView.builder(
                   //itemExtent: 80.0,
                   itemCount: snapshot.data.documents.length,
-                  itemBuilder: (context, index) =>//_buildListItem(context, snapshot.data.documents[index]),
-                      usertags.contains(snapshot.data.documents[index]["Tag"]) ?
+                  itemBuilder: (context, index) =>
+                    usertags == null|| usertags.contains(snapshot.data.documents[index]["Tag"])?
                       _buildListItem(context, snapshot.data.documents[index]):
                       Container(), //build an empty Widget if tag isn't in usersTag
                 );
